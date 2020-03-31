@@ -1,5 +1,6 @@
 package pages;
 
+import annotation.FieldName;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -20,13 +21,21 @@ public class CartPage extends BasePage {
 
 
     @FindBy(xpath = "//button[.//div[contains(text(),\"Удалить\")]]")
+    @FieldName(name = "подтвердить удаление")
     WebElement confirmRemoving;
 
     @FindBy(xpath="//span[contains(text(),\"Удалить выбранные\")]")
+    @FieldName(name = "удалить выбранные")
     WebElement removeSelected;
 
     @FindBy(xpath = "//h1[contains(text(),\"Корзина пуста\")]")
+    @FieldName(name = "корзина пуста")
     WebElement emptyCart;
+
+    @Override
+    public WebElement getField(String name) throws Exception {
+        return getField(name, "pages.CartPage");
+    }
 
     public void checkIfAllProductsPresent() {
         for (Map.Entry<String, String> pair : BaseSteps.addedToCart.entrySet())
@@ -74,11 +83,6 @@ public class CartPage extends BasePage {
         removeSelected.click();
         confirmRemoving.click();
         BaseSteps.addedToCart.clear();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void checkIsCartEmpty() {

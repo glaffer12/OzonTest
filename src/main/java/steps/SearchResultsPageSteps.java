@@ -33,7 +33,7 @@ public class SearchResultsPageSteps {
     }
 
     @Когда("выполнен переход в корзину")
-    public void выполнен_переход_в_корзину() {
+    public void выполнен_переход_в_корзину() throws Exception {
         searchResultsPage.goToCart();
     }
 
