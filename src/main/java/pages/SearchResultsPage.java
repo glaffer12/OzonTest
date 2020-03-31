@@ -25,7 +25,7 @@ public class SearchResultsPage extends BasePage {
     @FieldName(name = "чекмарки")
     List<WebElement> checkmarkFilters;
 
-    @FindBy(xpath ="//div[@class=\"widget-search-result-container an2\"]/div/div[@class]")
+    @FindBy(xpath ="//div[contains(@class,\"widget-search-result-container\")]/div/div[@class]")
     @FieldName(name = "результаты поиска")
     List<WebElement> searchResults;
 
@@ -67,10 +67,16 @@ public class SearchResultsPage extends BasePage {
     }
 
     public void waitWhileFilterLoaded() {
-        try {
+        /*try {
+            scrollToElement(searchResults.get(0));
             waitElementToBeClickable(searchResults.get(0).findElement(By.xpath("//div[./div[contains(text(),\"В корзину\")]]")));
         } catch (NoSuchElementException e) {
             Assert.fail("По данным параметрам не найдено ни одного товара.");
+        }*/
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -107,15 +113,17 @@ public class SearchResultsPage extends BasePage {
         }
         while(number>0) {
             try {
-                scrollToElement(searchResults.get(count).findElement(By.xpath(".//div[./div[contains(text(),\"В корзину\")]]")));
+                scrollToElement(searchResults.get(count));
                 waitElementToBeClickable(searchResults.get(count).findElement(By.xpath(".//div[./div[contains(text(),\"В корзину\")]]")));
                 searchResults.get(count).findElement(By.xpath(".//div[./div[contains(text(),\"В корзину\")]]")).click();
-                BaseSteps.addedToCart.put(searchResults.get(count).findElement(By.xpath(".//a[contains(@class,\"a4s8 tile-hover-target\")]")).getText(),searchResults.get(count).findElement(By.xpath(".//span[contains(text(),\"₽\")]")).getText());
+                BaseSteps.addedToCart.put(searchResults.get(count).findElement(By.xpath(".//div[./span]//a[contains(@class,\"tile-hover-target\")]")).getText(),searchResults.get(count).findElement(By.xpath(".//span[contains(text(),\"₽\")]")).getText());
                 waitWhileProductAdded();
                 count = count +2;
                 number--;
+                System.out.println(number);
             } catch (NoSuchElementException e) {
                 count = count + 2;
+                System.out.println(number);
             }
         }
         System.out.println(BaseSteps.addedToCart.toString());
@@ -159,7 +167,7 @@ public class SearchResultsPage extends BasePage {
             if(BaseSteps.addedToCart.size()==(Integer.parseInt(numberOfProductsInCart.getText()))) break;
             else {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
